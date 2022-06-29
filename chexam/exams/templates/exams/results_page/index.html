@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="modules-list max-h-[350px] overflow-y-auto mt-10 flex flex-wrap">
+    <div class="modules-list max-h-[350px] pb-10 overflow-y-auto mt-10 flex flex-wrap">
         {% if not results %}
-            <span class="text-gray-800">No results</span>
+            <span class="text-gray-800">No results for the moment</span>
         {% endif %}
         {% for result in results %}
             {% include 'exams/results_page/components/result.html' with result=result %}

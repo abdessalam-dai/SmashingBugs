@@ -8,9 +8,9 @@
                  class="rounded-full">
         </div>
         <div class="user-details">
-            <h2 class="user-name font-bold">{{ reclamation.result.student.get_full_name }}</h2>
-            <h5 class="year-class">{{ reclamation.result.student.classroom }}</h5>
-            <h4 class="exam-date">{{ reclamation.result.date_created|date:"Y-m-d" }}</h4>
+            <h2 class="user-name font-semibold">{{ reclamation.result.student.get_full_name }}</h2>
+            <h5 class="year-class text-sm">{{ reclamation.result.student.classroom }}</h5>
+            <h4 class="exam-date text-sm">{{ reclamation.result.date_created|date:"Y-m-d" }}</h4>
         </div>
     </div>
 

@@ -47,12 +47,11 @@
 {% endblock %}
 
 {% block content %}
-    <div class="max-h-[60vh] overflow-y-auto custom-scroll">
+    <div class="max-h-[60vh] pb-10 overflow-y-auto custom-scroll">
         {% if is_teacher %}
             {% include 'exams/result_details/components/teacher_view.html' %}
         {% else %}
             {% include 'exams/result_details/components/student_view/index.html' %}
         {% endif %}
     </div>
-{#<div class="result" style="z-index: 99999999999999999"></div>#}
 {% endblock %}

@@ -1,0 +1,30 @@
+{% load static %}
+
+<div class="hidden cardrect space-y-3 flex flex-col card space-x-2 justify-center shadow-lg w-2/3 px-3 pt-10 pb-3 rounded-lg">
+    <div class="flex flex-col justify-center items-center space-y-5">
+        <h1 class="font-bold text-xl text-blue-900 text-center">Uploading your documents</h1>
+        <img src="{% static 'imgs/uploadhero.svg' %}" class="w-32" alt="">
+    </div>
+    <div class="flex-row flex text-sm justify-between text-gray-700">
+        <span class="">
+            0 of 3 uploaded
+        </span>
+        <button>Cancel</button>
+    </div>
+    <div class="uploads flex flex-col space-y-2">
+        <div class="uploadRect bg-white rounded-lg shadow-lg flex flex-row space-x-3 px-4 py-1.5 items-center">
+            <i class="fa-solid fa-file-pdf text-3xl text-gray-800"></i>
+            <div class="flex flex-col justify-center text-xs">
+                <span>1.pdf</span>
+                <span class="font-semibold">259 Kb</span>
+            </div>
+        </div>
+        <div class="uploadRect bg-[#5082ce] rounded-lg shadow-lg flex flex-row space-x-3 px-4 py-1.5 items-center">
+            <i class="fa-solid fa-file-pdf text-3xl text-white"></i>
+            <div class="flex flex-col justify-center text-gray-200 text-xs">
+                <span>2.pdf</span>
+                <span class="font-semibold">259 Kb</span>
+            </div>
+        </div>
+    </div>
+</div>

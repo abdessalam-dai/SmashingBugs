@@ -3,11 +3,13 @@
 {% include 'exams/result_details/components/student_view/pdfs.html' with student_view=False%}
 
 {% if result.verified %}
-    {{ result.student.user.get_full_name }} has verified his exam paper
+    <div class="text-white py-8 text-center text-xl font-semibold">
+        {{ result.student.user.get_full_name }} has verified his exam paper
+    </div>
 {% else %}
-    {{ result.student.user.get_full_name }}'s report
+    <div class="text-white py-8 text-center text-xl font-semibold">{{ result.student.user.get_full_name }}'s report</div>
 
-    <div class="reports space-y-4 flex flex-col justify-start items-center">
+    <div class="reports space-y-6 flex flex-col justify-start items-center">
         {% for problem in problems %}
             {% include 'exams/result_details/components/problem_teacher_view.html' with problem=problem %}
         {% endfor %}

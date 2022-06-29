@@ -34,9 +34,6 @@ def results_page(request):
     if is_teacher(request.user):
         return redirect("reclamations_page")
 
-    if request.user.is_staff:
-        return redirect("add_exam")
-
     student = request.user.student
     results = student.result_set.all()
 
@@ -89,115 +86,127 @@ def convertPDFToImg2(pdfLoc, destin):
     images = convert_from_path(pdfLoc, 500)
     for i in range(len(images)):
         images[i].save('page' + str(i) + '.jpg', 'JPEG')
-        shutil.move('page' +str(i)+'.jpg', destin)
-    
+        shutil.move('page' + str(i) + '.jpg', destin)
+
+
 from pdf2image import convert_from_path
 import pytesseract
-import  cv2
+import cv2
+
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+
 
 def convertPDFToImg(pdfLoc):
     temp = list(pdfLoc)
     temp[0] = ''
     pdfLoc = "".join(temp)
-    images = convert_from_path(pdfLoc,500, poppler_path=r'C:\Program Files\poppler-0.67.0\bin')
+    images = convert_from_path(pdfLoc, 500, poppler_path=r'C:\Program Files\poppler-0.67.0\bin')
     for i in range(len(images)):
-        images[i].save('page'+ str(i) +'.jpg', 'JPEG')
-def extractKey(data:str):
+        images[i].save('page' + str(i) + '.jpg', 'JPEG')
+
+
+def extractKey(data: str):
     key = ""
     for line in data.splitlines():
-        line.replace(' ','')
+        line.replace(' ', '')
         line = line.lower()
         if 'matricule' in line:
-            i = line.index('matricule')+len('matricule')
-            while i<len(line):
+            i = line.index('matricule') + len('matricule')
+            while i < len(line):
                 start = True
                 if line[i].isnumeric():
-                    key+=line[i]
-                    i+=1
+                    key += line[i]
+                    i += 1
                     start = False
                 else:
                     if not start:
                         return int(key)
                     else:
-                        i+=1
+                        i += 1
             return key
+
+
 def extractDetails(data):
-    dets = {"nom":"","prenom":"","groupe":""}
+    dets = {"nom": "", "prenom": "", "groupe": ""}
     for line in data.splitlines():
         line = line.lower()
         for word in dets.keys():
 
             if word in line:
-                i = line.index(word) + len(word)+1
+                i = line.index(word) + len(word) + 1
                 start = True
                 while i < len(line):
                     if not line[i].isalpha():
                         if not start:
                             break
-                        i+=1
+                        i += 1
                     else:
-                        dets[word]+=line[i]
-                        i+=1
+                        dets[word] += line[i]
+                        i += 1
                         start = False
-            if word=="groupe":
+            if word == "groupe":
                 return dets
-def treatImg(imgLoc,mat):
 
+
+def treatImg(imgLoc, mat):
     img = cv2.imread(imgLoc)
-    img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-    hImg, wImg,r = img.shape
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    hImg, wImg, r = img.shape
 
     data = pytesseract.image_to_string(img)
     print(data)
-    mat=extractKey(data)
+    mat = extractKey(data)
     print(extractKey(data))
     print(extractDetails(data))
     return extractKey(data)
 
+
 @login_required
 def add_scans(request):
+    if is_student(request.user):
+        raise Http404
+
     teacher = request.user.teacher
     sol_form = addSolutionForm(request.POST, request.FILES)
     scan_form = addPdf(request.POST, request.FILES)
     if request.method == "POST":
-         
-            test_student=get_object_or_404(Student,matricule='111') 
-          
-            exam = Exam.objects.get(teacher=teacher)
-                     
-            result=Result(student=test_student,exam=exam,mark=0.0)
-            
-            scan_form = addPdf(request.POST, request.FILES,instance=result)   
+
+        test_student = get_object_or_404(Student, matricule='111')
+
+        exam = Exam.objects.get(teacher=teacher)
+
+        result = Result(student=test_student, exam=exam, mark=0.0)
+
+        scan_form = addPdf(request.POST, request.FILES, instance=result)
+        if scan_form.is_valid():
+            scan_form.save()
+            file_p = Result.objects.get(student=test_student)
+            file_path = rf'{file_p.scan.url}'
+            temp = list(file_path)
+            temp[0] = ''
+
+            file_pat = "".join(temp)
+            convertPDFToImg(file_path)
+            mat = 0
+            treatImg(r'page0.jpg', mat)
+
+            mat = '19831243'
+            student = get_object_or_404(Student, matricule=mat)
+            result2 = Result(student=student, exam=exam, mark=1)
+            scan_form = addPdf(request.POST, request.FILES, instance=result2)
             if scan_form.is_valid():
                 scan_form.save()
-                file_p=Result.objects.get(student=test_student)
-                file_path=rf'{file_p.scan.url}'
-                temp = list(file_path)
-                temp[0] = ''
-
-                file_pat = "".join(temp)
-                convertPDFToImg(file_path)
-                mat=0
-                treatImg(r'page0.jpg',mat)
-                
-                mat='19831243'
-                student=get_object_or_404(Student,matricule=mat)
-                result2=Result(student=student,exam=exam,mark=1)
-                scan_form = addPdf(request.POST, request.FILES,instance=result2)  
-                if scan_form.is_valid():
-                    scan_form.save()
-                result2.save()
-                file_path=rf'{file_p.scan.url}'
-                destin=rf'media/{exam.id}/{student}/PDFs/'
-                convertPDFToImg2(file_path,destin)
+            result2.save()
+            file_path = rf'{file_p.scan.url}'
+            destin = rf'media/{exam.id}/{student}/PDFs/'
+            convertPDFToImg2(file_path, destin)
+            return redirect("reclamations_page")
+        if name == 'sol_btn':
+            exam = Exam.objects.get(teacher=teacher)
+            sol_form = addSolutionForm(request.POST, request.FILES, instance=exam)
+            if sol_form.is_valid():
+                sol_form.save()
                 return redirect("reclamations_page")
-            if name=='sol_btn' : 
-                        exam = Exam.objects.get(teacher=teacher)
-                        sol_form = addSolutionForm(request.POST, request.FILES,instance=exam)
-                        if sol_form.is_valid():
-                            sol_form.save()
-                            return redirect("reclamations_page")
     context = {
         'sol_form': sol_form,
         'scan_form': scan_form
@@ -205,9 +214,11 @@ def add_scans(request):
     return render(request, "exams/add_solution/index.html", context=context)
 
 
-
 @login_required
 def reclamations_page(request):
+    if is_student(request.user):
+        raise Http404
+
     teacher = request.user.teacher
     reclamations = Reclamation.objects.filter(result__exam__teacher=teacher, treated=False)
     form = addPdf(request.POST, request.FILES)

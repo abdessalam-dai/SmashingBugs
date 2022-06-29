@@ -1,5 +1,5 @@
 <a href="{% url 'result_details' result.id %}" class="module h-40 w-40 mx-3.5 mb-5 items-center  flex flex-col justify-center p-5 rounded-3xl text-center">
-    <h2 class="module-name text-4xl font- bold mb-4">{{ result.exam }}</h2>
-    <h4 class="module-mark">Exam: {{ result.mark }}</h4>
-    <h4 class="module-teacher">{{ result.exam.teacher.get_full_name }}</h4>
+    <h2 class="module-name text-[#282828] text-4xl mt-6 font-bold">{{ result.exam }}</h2>
+    <h4 class="module-mark font-semibold text-[#5E5B5B]">Exam: {{ result.mark }}</h4>
+    <h4 class="module-teacher text-[#5E5B5B] mt-6 text-sm">{{ result.exam.teacher.get_full_name }}</h4>
 </a>

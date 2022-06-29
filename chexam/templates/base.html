@@ -6,7 +6,7 @@
 <head>
 
     <title>{% block title %}{% endblock %} Chexam</title>
-
+    <link rel="icon" href="{% static 'imgs/logo.svg' %}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src=
@@ -129,14 +129,14 @@
 
 <main class="flex items-center justify-center min-h-screen">
     <section class="glass flex h-[80vh]   w-[70%]  z-10 rounded-2xl">
-        <div class="dashboard relative w-full">
+        <div class="dashboard overflow-hidden relative w-full">
             <!-- START sidebar -->
             {% if request.user.is_authenticated %}
                 {% include 'components/sidebars/base.html' %}
             {% endif %}
             <!-- END sidebar -->
 
-            <div class="content   pl-[12%] pr-12">
+            <div class="content pl-[12%] pr-12">
                 <!-- START navbar -->
                 {% if request.user.is_authenticated %}
                     {% include 'components/navbars/base.html' %}

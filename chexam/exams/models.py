@@ -61,7 +61,7 @@ def folder_name2(Problem, filename):
 class Problem(Model):
     reclamation = models.ForeignKey(Reclamation, on_delete=models.CASCADE)
     comment = models.CharField(max_length=1500)
-    approved = models.BooleanField(default=False)
+    approved = models.BooleanField(default=True)
     problem_type = models.CharField(
         max_length=30,
         choices=PROBLEM_TYPE_CHOICES,

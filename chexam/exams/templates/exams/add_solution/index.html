@@ -49,38 +49,41 @@
 {% block content %}
 
     <div class="space-y-7 flex flex-col items-center mt-10 justify-center">
-        <form method="POST"  enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-        <div class="cardrect flex flex-row card space-x-2 shadow-lg w-2/3 px-3 py-2 rounded-lg">
-            <img src="{% static 'imgs/upload.png' %}" class="w-36 " alt="">
-            <div id="students-files-div"
-                 class="flex flex-col cursor-pointer justify-center space-y-1">
-                <h1 class="text-lg font-bold text-slate-900">Upload Students Files</h1>
-                <p class="text-gray-800">Upload students exams paper to the database.</p>
+            <div id="students-files-div" class="cardrect cursor-pointer flex flex-row card space-x-4 shadow-lg w-100 px-5 py-6 rounded-lg">
+                <img src="{% static 'imgs/upload.png' %}" class="w-16 h-16 " alt="">
+                <div class="flex flex-col justify-center space-y-1">
+                    <h1 class="text-lg font-bold text-slate-900">Upload Students Files</h1>
+                    <p class="text-gray-800">Upload students exams paper to the database</p>
+                </div>
+                <div class="hidden">
+                    {{ scan_form }}
+                    <!input type="file" id="students_files" class="hidden" name="students_files"
+                    onchange="form.submit()" multiple>
+                </div>
             </div>
-            <div class="hidden">
-            {{scan_form}}
-            <!input type="file" id="students_files" class="hidden" name="students_files" onchange="form.submit()" multiple>
-             </div>
-             <input type="submit" name='scan_btn' value="ok">
-        </div>
-        
+                <input type="submit" name='scan_btn' value="ok">
+
         </form>
-        <form method="POST"  enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-        <div class="cardrect flex flex-row card space-x-2 shadow-lg w-2/3 px-7 py-4 rounded-lg">
-            <img src="{% static 'imgs/upload2.png' %}" class="w-32" alt="">
             <div id="correction_div"
-                 class="flex flex-col cursor-pointer justify-center space-y-1">
-                <h1 class="text-lg font-bold text-slate-900">Upload corrections</h1>
-                <p class="text-gray-800">Upload exams corrections to the data base.</p>
+                 class="cardrect  cursor-pointer flex flex-row card space-x-4 shadow-lg w-100 px-5 py-6 rounded-lg">
+                <img src="{% static 'imgs/upload2.png' %}" class="w-16 h-16" alt="">
+                <div class="flex flex-col justify-center space-y-1">
+                    <h1 class="text-lg font-bold text-slate-900">Upload corrections</h1>
+                    <p class="text-gray-800">Upload exams solution to the database</p>
+                </div>
+                <div class="hidden">
+                    {{ sol_form }}
+                    <!input type="file" class="hidden" id="correction" name="correction"
+                    onchange="form.submit()"><br><br>
+                </div>
             </div>
-            <div class="hidden">
-            {{sol_form}}
-            <!input type="file" class="hidden" id="correction" name="correction" onchange="form.submit()"><br><br>
-        </div>
-        </div>
         </form>
+
+        {% include 'exams/add_solution/components/uploading_exam_papers.html' %}
     </div>
     <script>
         const studentsFilesDiv = document.querySelector("#students-files-div");

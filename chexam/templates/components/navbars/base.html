@@ -14,7 +14,7 @@
     </div>
     <div class="details mt-4 text-right  text-white">
         <p class="semester font-bold">Semester 2</p>
-        <p class="time">
+        <p class="average">
             {% if request.user.teacher %}
                 {{ request.user.teacher.module_name }}
             {% elif request.user.student %}
